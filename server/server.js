@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose')
-const db = require('./config/connection')
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -11,7 +10,10 @@ app.use(express.static('public'));
 
 app.use(require('./routes'));
 
-mongoose.connect(db);
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/emailer-app', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(console.log('connected to mongo db'));
 
 // logs mongo queries being executed
 mongoose.set('debug', true);
